@@ -17,8 +17,7 @@ public class HelloworldApp {
 		ScoreDirectorFactory scoreDirectorFactory = solver.getScoreDirectorFactory();
 		scoreDirector = scoreDirectorFactory.buildScoreDirector();
 
-    // HelloSolution helloSolution = new HelloSolution();
-    HelloworldSolution helloSolution = new HelloworldSolution();
+		HelloworldSolution helloSolution = new HelloworldSolution();
 		scoreDirector.setWorkingSolution(helloSolution);
 
 		solver.solve(helloSolution);
