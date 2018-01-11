@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+	<!-- Define the model -->
+	<solutionClass>com.homerlogistics.optaplanner.TSP.domain.TSPSolution</solutionClass>
+	<entityClass>com.homerlogistics.optaplanner.TSP.domain.Trail</entityClass>
+
+	<!-- Define the score function -->
+	<scoreDirectorFactory>
+		<easyScoreCalculatorClass>com.homerlogistics.optaplanner.TSP.score.TSPScore</easyScoreCalculatorClass>
+	</scoreDirectorFactory>
+
+	<!-- Configure the optimization algorithms (optional) -->
+  	<termination>
+	 	 <secondsSpentLimit>20</secondsSpentLimit>
+  	</termination>
+
+	<constructionHeuristic>
+		<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+	</constructionHeuristic>
+
+	<localSearch>
+		<unionMoveSelector>
+			<!--<changeMoveSelector>-->
+			<!--<cacheType>PHASE</cacheType>-->
+			<!--<selectionOrder>SHUFFLED</selectionOrder>-->
+			<!--</changeMoveSelector>-->
+			<!--<swapMoveSelector>-->
+			<!--<cacheType>PHASE</cacheType>-->
+			<!--<selectionOrder>SHUFFLED</selectionOrder>-->
+			<!--</swapMoveSelector>-->
+			<tailChainSwapMoveSelector/>
+			<subChainChangeMoveSelector>
+				<subChainSelector>
+					<maximumSubChainSize>50</maximumSubChainSize>
+				</subChainSelector>
+				<selectReversingMoveToo>true</selectReversingMoveToo>
+			</subChainChangeMoveSelector>
+			<!--<subChainSwapMoveSelector>-->
+			<!--<selectReversingMoveToo>false</selectReversingMoveToo>-->
+			<!--</subChainSwapMoveSelector>-->
+			<!-- TODO use nearby selection to scale out -->
+		</unionMoveSelector>
+		<acceptor>
+			<lateAcceptanceSize>400</lateAcceptanceSize>
+		</acceptor>
+		<forager>
+			<acceptedCountLimit>1</acceptedCountLimit>
+		</forager>
+	</localSearch>
+
+	<!--<localSearch>-->
+		<!--<unionMoveSelector>-->
+			<!--<subChainChangeMoveSelector>-->
+				<!--<subChainSelector>-->
+					<!--<maximumSubChainSize>50</maximumSubChainSize>-->
+				<!--</subChainSelector>-->
+				<!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
+			<!--</subChainChangeMoveSelector>-->
+			<!--<tailChainSwapMoveSelector>-->
+				<!--&lt;!&ndash;<entitySelector id="entitySelector">&ndash;&gt;-->
+					<!--&lt;!&ndash;<entityClass>com.homerlogistics.optaplanner.TSP.domain.Trail</entityClass>&ndash;&gt;-->
+				<!--&lt;!&ndash;</entitySelector>&ndash;&gt;-->
+				<!--&lt;!&ndash;<valueSelector>&ndash;&gt;-->
+					<!--&lt;!&ndash;<nearbySelection>&ndash;&gt;-->
+						<!--&lt;!&ndash;<originEntitySelector mimicSelectorRef="entitySelector"/>&ndash;&gt;-->
+						<!--&lt;!&ndash;<nearbyDistanceMeterClass>com.homerlogistics.optaplanner.TSP.tweaking.TrailNearbyDistanceMeter</nearbyDistanceMeterClass>&ndash;&gt;-->
+						<!--&lt;!&ndash;<nearbySelectionDistributionType>PARABOLIC_DISTRIBUTION</nearbySelectionDistributionType>&ndash;&gt;-->
+					<!--&lt;!&ndash;</nearbySelection>&ndash;&gt;-->
+				<!--&lt;!&ndash;</valueSelector>&ndash;&gt;-->
+			<!--</tailChainSwapMoveSelector>-->
+			<!--&lt;!&ndash; TODO use nearby selection to scale out &ndash;&gt;-->
+		<!--</unionMoveSelector>-->
+		<!--<acceptor>-->
+			<!--<lateAcceptanceSize>400</lateAcceptanceSize>-->
+		<!--</acceptor>-->
+
+		<!--<forager>-->
+			<!--<acceptedCountLimit>1</acceptedCountLimit>-->
+		<!--</forager>-->
+	<!--</localSearch>-->
+</solver>
