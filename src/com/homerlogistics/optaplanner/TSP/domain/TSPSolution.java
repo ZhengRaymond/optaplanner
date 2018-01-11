@@ -32,7 +32,7 @@ public class TSPSolution {
     City previousCity = this.anchor;
     for (int i = 1; i < this.cityList.size(); i++) {
       City currentCity = this.cityList.get(i);
-      trailList.add(new Trail(previousCity, currentCity.getId(), currentCity.getX(), currentCity.getY()));
+      trailList.add(new Trail(null, currentCity.getId(), currentCity.getX(), currentCity.getY()));
       previousCity = currentCity;
     }
   }
