@@ -17,8 +17,7 @@ public class VRPSolution {
 
   /**************** Fields ****************/
   private Anchor anchor;
-  private List<PickupPoint> pickupList;
-  private List<DropoffPoint> dropoffList;
+  private List<Point> pointList;
   private List<Vehicle> vehicleList; // the solution
 //  private List<Standstill> trailList;
   private HardSoftScore score;
@@ -31,17 +30,12 @@ public class VRPSolution {
   public Anchor getAnchor() { return anchor; }
   public void setAnchor(Anchor anchor) { this.anchor = anchor; }
 
-  @ProblemFactCollectionProperty
-  @ValueRangeProvider(id = "PickupRange")
-  public List<PickupPoint> getPickupList() { return pickupList; }
-  public void setPickupList(List<PickupPoint> pickupList) { this.pickupList = pickupList; }
-
-  @ProblemFactCollectionProperty
-  @ValueRangeProvider(id = "DropoffRange")
-  public List<DropoffPoint> getDropoffList() { return dropoffList; }
-  public void setDropoffList(List<DropoffPoint> dropoffList) { this.dropoffList = dropoffList; }
-
   @PlanningEntityCollectionProperty
+  @ValueRangeProvider(id = "PointRange")
+  public List<Point> getPointList() { return pointList; }
+  public void setPointList(List<Point> pointList) { this.pointList= pointList; }
+
+//  @PlanningEntityCollectionProperty
   @ValueRangeProvider(id = "VehicleRange")
   public List<Vehicle> getVehicleList() { return vehicleList; }
   public void setVehicleList(List<Vehicle> vehicleList) { this.vehicleList = vehicleList; }
@@ -56,18 +50,36 @@ public class VRPSolution {
   public void setScore(HardSoftScore score) { this.score = score; }
 
   /**************** ValueRangeProviders ****************/
+  @ProblemFactCollectionProperty
   @ValueRangeProvider(id = "AnchorRange")
   public List<Anchor> getAnchorRange() { return Collections.singletonList(anchor); }
 
   public String toString() {
-    String x = "x = [";
-    String y = "y = [";
-    // ...
-    // ...
-    // ...
-    x += "]; ";
-    y += "]; ";
-    String s = x + y + "plot(x, y);";
+//    String x = "x = [";
+//    String y = "y = [";
+//    x += "]; ";
+//    y += "]; ";
+//    String s = x + y + "plot(x, y);";
+    String s = "";
+    int count = 1;
+    for (Vehicle vehicle : vehicleList) {
+      s += "Vehicle"  + count + ": ";
+      count++;
+      Standstill ss = vehicle.getAnchor();
+      while (ss != null) {
+        boolean found = false;
+        for (Point point : pointList) {
+          if (ss == point.getPreviousStandstill()) {
+            s += point.getLocation().toString() + ",";
+            ss = point;
+            found = true;
+          }
+        }
+        if (!found) break;
+      }
+      s += "\n";
+    }
+    System.out.println("Score: " + score.toString());
     return s;
   }
 

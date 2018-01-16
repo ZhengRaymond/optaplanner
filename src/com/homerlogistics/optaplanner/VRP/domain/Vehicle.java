@@ -2,6 +2,8 @@ package com.homerlogistics.optaplanner.VRP.domain;
 
 import org.optaplanner.core.api.domain.variable.InverseRelationShadowVariable;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
+import org.optaplanner.core.api.domain.variable.PlanningVariable;
+import org.optaplanner.core.api.domain.variable.PlanningVariableGraphType;
 
 public class Vehicle implements Standstill {
   protected int capacity;
@@ -24,12 +26,12 @@ public class Vehicle implements Standstill {
     this.anchor = anchor;
   }
 
-  @Override
   public Standstill getNextStandstill() { return nextStandstill; }
 
   @Override
   public void setNextStandstill(Standstill nextStandstill) { this.nextStandstill = nextStandstill; }
 
+  @Override
   public Vehicle getVehicle() { return this; }
   public Location getLocation() { return anchor.getLocation(); }
 

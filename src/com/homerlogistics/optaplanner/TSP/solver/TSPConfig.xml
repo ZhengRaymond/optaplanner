@@ -18,64 +18,64 @@
 		<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
 	</constructionHeuristic>
 
-	<!--<localSearch>-->
-		<!--<unionMoveSelector>-->
-			<!--&lt;!&ndash;<changeMoveSelector>&ndash;&gt;-->
-			<!--&lt;!&ndash;<cacheType>PHASE</cacheType>&ndash;&gt;-->
-			<!--&lt;!&ndash;<selectionOrder>SHUFFLED</selectionOrder>&ndash;&gt;-->
-			<!--&lt;!&ndash;</changeMoveSelector>&ndash;&gt;-->
-			<!--&lt;!&ndash;<swapMoveSelector>&ndash;&gt;-->
-			<!--&lt;!&ndash;<cacheType>PHASE</cacheType>&ndash;&gt;-->
-			<!--&lt;!&ndash;<selectionOrder>SHUFFLED</selectionOrder>&ndash;&gt;-->
-			<!--&lt;!&ndash;</swapMoveSelector>&ndash;&gt;-->
-			<!--<tailChainSwapMoveSelector/>-->
-			<!--<subChainChangeMoveSelector>-->
-				<!--<subChainSelector>-->
-					<!--<maximumSubChainSize>50</maximumSubChainSize>-->
-				<!--</subChainSelector>-->
-				<!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
-			<!--</subChainChangeMoveSelector>-->
-			<!--&lt;!&ndash;<subChainSwapMoveSelector>&ndash;&gt;-->
-			<!--&lt;!&ndash;<selectReversingMoveToo>false</selectReversingMoveToo>&ndash;&gt;-->
-			<!--&lt;!&ndash;</subChainSwapMoveSelector>&ndash;&gt;-->
-			<!--&lt;!&ndash; TODO use nearby selection to scale out &ndash;&gt;-->
-		<!--</unionMoveSelector>-->
-		<!--<acceptor>-->
-			<!--<lateAcceptanceSize>400</lateAcceptanceSize>-->
-		<!--</acceptor>-->
-		<!--<forager>-->
-			<!--<acceptedCountLimit>1</acceptedCountLimit>-->
-		<!--</forager>-->
-	<!--</localSearch>-->
-
 	<localSearch>
 		<unionMoveSelector>
+			<!--<changeMoveSelector>-->
+			<!--<cacheType>PHASE</cacheType>-->
+			<!--<selectionOrder>SHUFFLED</selectionOrder>-->
+			<!--</changeMoveSelector>-->
+			<!--<swapMoveSelector>-->
+			<!--<cacheType>PHASE</cacheType>-->
+			<!--<selectionOrder>SHUFFLED</selectionOrder>-->
+			<!--</swapMoveSelector>-->
+			<tailChainSwapMoveSelector/>
 			<subChainChangeMoveSelector>
 				<subChainSelector>
 					<maximumSubChainSize>50</maximumSubChainSize>
 				</subChainSelector>
 				<selectReversingMoveToo>true</selectReversingMoveToo>
 			</subChainChangeMoveSelector>
-			<tailChainSwapMoveSelector>
-				<entitySelector id="entitySelector">
-					<entityClass>com.homerlogistics.optaplanner.TSP.domain.Trail</entityClass>
-				</entitySelector>
-				<valueSelector>
-					<nearbySelection>
-						<originEntitySelector mimicSelectorRef="entitySelector"/>
-						<nearbyDistanceMeterClass>com.homerlogistics.optaplanner.TSP.tweaking.TrailNearbyDistanceMeter</nearbyDistanceMeterClass>
-						<nearbySelectionDistributionType>PARABOLIC_DISTRIBUTION</nearbySelectionDistributionType>
-					</nearbySelection>
-				</valueSelector>
-			</tailChainSwapMoveSelector>
+			<!--<subChainSwapMoveSelector>-->
+			<!--<selectReversingMoveToo>false</selectReversingMoveToo>-->
+			<!--</subChainSwapMoveSelector>-->
 			<!-- TODO use nearby selection to scale out -->
 		</unionMoveSelector>
 		<acceptor>
 			<lateAcceptanceSize>400</lateAcceptanceSize>
 		</acceptor>
-
 		<forager>
 			<acceptedCountLimit>1</acceptedCountLimit>
 		</forager>
 	</localSearch>
+
+	<!--<localSearch>-->
+		<!--<unionMoveSelector>-->
+			<!--<subChainChangeMoveSelector>-->
+				<!--<subChainSelector>-->
+					<!--<maximumSubChainSize>50</maximumSubChainSize>-->
+				<!--</subChainSelector>-->
+				<!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
+			<!--</subChainChangeMoveSelector>-->
+			<!--<tailChainSwapMoveSelector>-->
+				<!--<entitySelector id="entitySelector">-->
+					<!--<entityClass>com.homerlogistics.optaplanner.TSP.domain.Trail</entityClass>-->
+				<!--</entitySelector>-->
+				<!--<valueSelector>-->
+					<!--<nearbySelection>-->
+						<!--<originEntitySelector mimicSelectorRef="entitySelector"/>-->
+						<!--<nearbyDistanceMeterClass>com.homerlogistics.optaplanner.TSP.tweaking.TrailNearbyDistanceMeter</nearbyDistanceMeterClass>-->
+						<!--<nearbySelectionDistributionType>PARABOLIC_DISTRIBUTION</nearbySelectionDistributionType>-->
+					<!--</nearbySelection>-->
+				<!--</valueSelector>-->
+			<!--</tailChainSwapMoveSelector>-->
+			<!--&lt;!&ndash; TODO use nearby selection to scale out &ndash;&gt;-->
+		<!--</unionMoveSelector>-->
+		<!--<acceptor>-->
+			<!--<lateAcceptanceSize>400</lateAcceptanceSize>-->
+		<!--</acceptor>-->
+
+		<!--<forager>-->
+			<!--<acceptedCountLimit>1</acceptedCountLimit>-->
+		<!--</forager>-->
+	<!--</localSearch>-->
 </solver>

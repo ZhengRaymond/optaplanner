@@ -13,36 +13,30 @@ public class VRPScore implements EasyScoreCalculator<VRPSolution> {
      int hardScore = 0;
      int softScore = 0;
     List<Vehicle> vehicleList = solution.getVehicleList();
-    List<PickupPoint> pickupList = solution.getPickupList();
-    List<DropoffPoint> dropoffList = solution.getDropoffList();
+    List<Point> pointList = solution.getPointList();
 
     for (Vehicle vehicle : vehicleList) {
        Standstill ss = vehicle.getAnchor();
        while (ss != null) {
          boolean found = false;
-         for (PickupPoint pickup : pickupList) {
-           if (pickup.getPreviousStandstill() == ss) {
-             softScore -= ss.getDistanceTo(pickup);
-             ss = pickup;
+         for (Point point : pointList) {
+           if (point.getPreviousStandstill() == ss) {
+             softScore -= ss.getDistanceTo(point);
+             ss = point;
              found = true;
-             break;
-           }
-         }
-         if (found) continue;
-         for (DropoffPoint dropoff : dropoffList) {
-           if (dropoff.getPreviousStandstill() == ss) {
-             if (dropoff.getSrc().getVehicle() != vehicle) {
-               hardScore -= 1;
+             Point src = point.getSource();
+             if (src != null) {
+               if (src.getVehicle() == point.getVehicle()) {
+                 // success
+               }
+               else {
+                 hardScore -= 1;
+               }
              }
-             softScore -= ss.getDistanceTo(dropoff);
-             ss = dropoff;
-             found = true;
              break;
            }
          }
-         if (found) continue;
-
-         break;
+         if (!found) break;
        }
      }
      return HardSoftScore.valueOf(hardScore, softScore);

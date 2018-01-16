@@ -2,45 +2,38 @@
 <solver>
 	<!-- Define the model -->
 	<solutionClass>com.homerlogistics.optaplanner.VRP.domain.VRPSolution</solutionClass>
-	<entityClass>com.homerlogistics.optaplanner.VRP.domain.DropoffPoint</entityClass>
-	<entityClass>com.homerlogistics.optaplanner.VRP.domain.PickupPoint</entityClass>
+	<entityClass>com.homerlogistics.optaplanner.VRP.domain.Point</entityClass>
+	<!--<entityClass>com.homerlogistics.optaplanner.VRP.domain.Anchor</entityClass>-->
 
 	<!-- Define the score function -->
 	<scoreDirectorFactory>
 		<easyScoreCalculatorClass>com.homerlogistics.optaplanner.VRP.score.VRPScore</easyScoreCalculatorClass>
+		<initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
 	</scoreDirectorFactory>
 
 	<!-- Configure the optimization algorithms (optional) -->
 	<termination>
-	<secondsSpentLimit>5</secondsSpentLimit>
+		<secondsSpentLimit>5</secondsSpentLimit>
 	</termination>
+
+	<constructionHeuristic>
+		<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+	</constructionHeuristic>
 
 	<localSearch>
 		<unionMoveSelector>
+			<changeMoveSelector/>
+			<swapMoveSelector/>
 			<subChainChangeMoveSelector>
-				<subChainSelector>
-					<maximumSubChainSize>50</maximumSubChainSize>
-				</subChainSelector>
 				<selectReversingMoveToo>true</selectReversingMoveToo>
 			</subChainChangeMoveSelector>
-			<tailChainSwapMoveSelector>
-				<entitySelector id="entitySelector">
-					<entityClass>com.homerlogistics.optaplanner.VRP.domain.PickupPoint</entityClass>
-					<entityClass>com.homerlogistics.optaplanner.VRP.domain.DropoffPoint</entityClass>
-				</entitySelector>
-				<!--<valueSelector>-->
-					<!--<nearbySelection>-->
-						<!--<originEntitySelector mimicSelectorRef="entitySelector"/>-->
-						<!--<nearbyDistanceMeterClass>com.homerlogistics.optaplanner.TSP.tweaking.TrailNearbyDistanceMeter</nearbyDistanceMeterClass>-->
-						<!--<nearbySelectionDistributionType>PARABOLIC_DISTRIBUTION</nearbySelectionDistributionType>-->
-					<!--</nearbySelection>-->
-				<!--</valueSelector>-->
-			</tailChainSwapMoveSelector>
+			<subChainSwapMoveSelector>
+				<selectReversingMoveToo>true</selectReversingMoveToo>
+			</subChainSwapMoveSelector>
 		</unionMoveSelector>
 		<acceptor>
-			<lateAcceptanceSize>400</lateAcceptanceSize>
+			<lateAcceptanceSize>200</lateAcceptanceSize>
 		</acceptor>
-
 		<forager>
 			<acceptedCountLimit>1</acceptedCountLimit>
 		</forager>

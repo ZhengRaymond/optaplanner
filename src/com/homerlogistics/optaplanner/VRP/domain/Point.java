@@ -7,23 +7,29 @@ import org.optaplanner.core.api.domain.variable.InverseRelationShadowVariable;
 import org.optaplanner.core.api.domain.variable.AnchorShadowVariable;
 
 @PlanningEntity
-public class DropoffPoint extends Location implements Standstill {
+public class Point extends Location implements Standstill {
 
   protected Standstill previousStandstill;
-  protected PickupPoint src;
-
   protected Standstill nextStandstill;
   protected Vehicle vehicle;
 
-  public DropoffPoint(int id, double x, double y) {
+  protected Point source;
+  protected Point destination;
+
+  public Point() {
+    super(-1, 0, 0);
+  }
+
+  public Point(int id, double x, double y) {
     super(id, x, y);
   }
 
-  @PlanningVariable( valueRangeProviderRefs = {"VehicleRange", "PickupRange", "DropoffRange"},
+  @PlanningVariable( valueRangeProviderRefs = {"VehicleRange", "PointRange", "AnchorRange"},
           graphType = PlanningVariableGraphType.CHAINED )
   public Standstill getPreviousStandstill() { return previousStandstill; }
   public void setPreviousStandstill(Standstill previousStandstill) { this.previousStandstill = previousStandstill; }
 
+  @Override
   @AnchorShadowVariable(sourceVariableName = "previousStandstill")
   public Vehicle getVehicle() { return vehicle; }
   public void setVehicle(Vehicle vehicle) { this.vehicle = vehicle; }
@@ -34,8 +40,22 @@ public class DropoffPoint extends Location implements Standstill {
   @Override
   public void setNextStandstill(Standstill nextStandstill) { this.nextStandstill = nextStandstill; }
 
-  public PickupPoint getSrc() { return src; }
-  public void setSrc(PickupPoint src) { this.src = src; }
+  public Point getSource() {
+    return source;
+  }
+
+  public void setSource(Point source) {
+    this.source = source;
+  }
+
+  public Point getDestination() {
+    return destination;
+  }
+
+  public void setDestination(Point destination) {
+    this.destination = destination;
+  }
+
 
   @Override
   public Location getLocation() {
@@ -45,5 +65,10 @@ public class DropoffPoint extends Location implements Standstill {
   @Override
   public double getDistanceTo(Standstill standstill) {
     return this.getDistanceTo(standstill.getLocation());
+  }
+
+  @Override
+  public String toString() {
+    return "(" + this.x + "," + this.y + ")";
   }
 }

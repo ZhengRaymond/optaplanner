@@ -25,8 +25,8 @@ public class TSPSolution {
   private HardSoftScore score;
 
   public TSPSolution() {
-    this.cityList = initializeCities("lu980");
-//     this.cityList = initializeCities("dj38");
+//    this.cityList = initializeCities("lu980");
+     this.cityList = initializeCities("dj38");
     this.trailList = new ArrayList<Trail>();
     this.anchor = cityList.get(0);
     City previousCity = this.anchor;
@@ -73,30 +73,55 @@ public class TSPSolution {
 
   public String toString() {
     List<Trail> trailList = this.trailList;
-    String s = "[ ";
-    for (int i = 1; i < trailList.size(); i++) {
-      Trail trail = trailList.get(i);
-      s += "[" + trail.getPreviousCity().getId() + "," + trail.getId() +  "]; ";
+    String s = "plt.plot(";
+    String x = "[" + anchor.getX();
+    String y = "[" + anchor.getY();
+    City curr = anchor;
+    while (curr != null) {
+      boolean found = false;
+      for (Trail trail : trailList) {
+        if (trail.getPreviousCity() == curr) {
+          curr = trail;
+          x += "," + curr.getX();
+          y += "," + curr.getY();
+          found = true;
+        }
+      }
+      if (!found) break;
     }
-    s += " ]";
+    x += "]";
+    y += "]";
+    s += y + "," + x + "," + "'-ro'" + "," + "markersize=13";
 
-    String x = "[ ";
-    for (int i = 1; i < trailList.size(); i++) {
-      Trail trail = trailList.get(i);
-      x += trail.getX() + ",";
-    }
-    x += " ]";
-
-    String y = "[ ";
-    for (int i = 1; i < trailList.size(); i++) {
-      Trail trail = trailList.get(i);
-      y += trail.getY() + ",";
-    }
-    y += " ]";
-
-    System.out.println(x);
-    System.out.println(y);
+    s += ")\nplt.gca().set_aspect('equal', adjustable='box')\nplt.show()";
     return s;
+
+
+//    List<Trail> trailList = this.trailList;
+//    String s = "[ ";
+//    for (int i = 1; i < trailList.size(); i++) {
+//      Trail trail = trailList.get(i);
+//      s += "[" + trail.getPreviousCity().getId() + "," + trail.getId() +  "]; ";
+//    }
+//    s += " ]";
+//
+//    String x = "[ ";
+//    for (int i = 1; i < trailList.size(); i++) {
+//      Trail trail = trailList.get(i);
+//      x += trail.getX() + ",";
+//    }
+//    x += " ]";
+//
+//    String y = "[ ";
+//    for (int i = 1; i < trailList.size(); i++) {
+//      Trail trail = trailList.get(i);
+//      y += trail.getY() + ",";
+//    }
+//    y += " ]";
+//
+//    System.out.println(x);
+//    System.out.println(y);
+//    return s;
   }
 
   private double distance(City a, City b) {

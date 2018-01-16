@@ -24,19 +24,18 @@ public class VRPApp {
 		int size = 20;
 		int numberOfVehicles = 3;
 
-		List<PickupPoint> pickupList = initializePickups(size);
-		List<DropoffPoint> dropoffList = initializeDropoffs(size);
+		List<Point> pointList = initialize(size);
 		Anchor anchor = new Anchor();
 		VRPSolution solution = new VRPSolution();
 		List<Vehicle> vehicleList = new ArrayList<Vehicle>();
 		for (int i = 0; i < numberOfVehicles; i++) {
 			Vehicle vehicle = new Vehicle();
+			vehicle.setNextStandstill(null);
 			vehicle.setAnchor(anchor);
 			vehicleList.add(vehicle);
 		}
 		solution.setAnchor(anchor);
-		solution.setPickupList(pickupList);
-		solution.setDropoffList(dropoffList);
+		solution.setPointList(pointList);
 		solution.setVehicleList(vehicleList);
 
 		scoreDirector.setWorkingSolution(solution);
@@ -45,19 +44,18 @@ public class VRPApp {
 		System.out.println(bestSolution.toString());
 	}
 
-	private static List<PickupPoint> initializePickups(int size) {
-		List<PickupPoint> pickupList = new ArrayList<PickupPoint>();
+	private static List<Point> initialize(int size) {
+		List<Point> pointList = new ArrayList<Point>();
 		for (int i = 0; i < size; i++) {
-			pickupList.add(new PickupPoint(i, Math.random() * 500, Math.random() * 8000));
+			Point src = new Point(i , Math.random() * 500, Math.random() * 8000);
+			Point dest = new Point(i + size, Math.random() * 500, Math.random() * 8000);
+			src.setNextStandstill(null);
+			dest.setNextStandstill(null);
+			src.setDestination(dest);
+			dest.setSource(src);
+			pointList.add(src);
+			pointList.add(dest);
 		}
-		return pickupList;
-	}
-
-	private static List<DropoffPoint> initializeDropoffs(int size) {
-		List<DropoffPoint> dropoffList = new ArrayList<DropoffPoint>();
-		for (int i = 0; i < size; i++) {
-			dropoffList.add(new DropoffPoint(i + size,Math.random() * 500, Math.random() * 8000));
-		}
-		return dropoffList;
+		return pointList;
 	}
 }
