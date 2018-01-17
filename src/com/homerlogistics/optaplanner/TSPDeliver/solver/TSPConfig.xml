@@ -2,24 +2,29 @@
 <solver>
 	<!-- Define the model -->
 	<solutionClass>com.homerlogistics.optaplanner.TSPDeliver.domain.TSPSolution</solutionClass>
+	<entityClass>com.homerlogistics.optaplanner.TSPDeliver.domain.Standstill</entityClass>
 	<entityClass>com.homerlogistics.optaplanner.TSPDeliver.domain.Customer</entityClass>
 
 	<!-- Define the score function -->
 	<scoreDirectorFactory>
 		<easyScoreCalculatorClass>com.homerlogistics.optaplanner.TSPDeliver.score.TSPScore</easyScoreCalculatorClass>
+		<initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
 	</scoreDirectorFactory>
 
 	<!-- Configure the optimization algorithms (optional) -->
   	<termination>
-	 	 <secondsSpentLimit>10</secondsSpentLimit>
+	 	 <secondsSpentLimit>60</secondsSpentLimit>
   	</termination>
 
 	<constructionHeuristic>
-		<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+		<constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
 	</constructionHeuristic>
 
 	<localSearch>
 		<unionMoveSelector>
+			<moveListFactory>
+				<moveListFactoryClass>com.homerlogistics.optaplanner.TSPDeliver.solver.PickupDeliveryChangeMoveFactory</moveListFactoryClass>
+			</moveListFactory>
 			<changeMoveSelector/>
 			<swapMoveSelector/>
 			<subChainChangeMoveSelector>
@@ -48,33 +53,4 @@
 			<acceptedCountLimit>1</acceptedCountLimit>
 		</forager>
 	</localSearch>
-
-	<!--<localSearch>-->
-		<!--<unionMoveSelector>-->
-			<!--<changeMoveSelector/>-->
-			<!--<swapMoveSelector/>-->
-			<!--<subChainChangeMoveSelector>-->
-				<!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
-			<!--</subChainChangeMoveSelector>-->
-			<!--<subChainSwapMoveSelector>-->
-				<!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
-			<!--</subChainSwapMoveSelector>-->
-			<!--&lt;!&ndash;<tailChainSwapMoveSelector>&ndash;&gt;-->
-				<!--&lt;!&ndash;<valueSelector>&ndash;&gt;-->
-					<!--&lt;!&ndash;<nearbySelection>&ndash;&gt;-->
-						<!--&lt;!&ndash;<originEntitySelector mimicSelectorRef="entitySelector"/>&ndash;&gt;-->
-						<!--&lt;!&ndash;<nearbyDistanceMeterClass>com.homerlogistics.optaplanner.TSPDeliver.solver.distanceMeter</nearbyDistanceMeterClass>&ndash;&gt;-->
-						<!--&lt;!&ndash;<nearbySelectionDistributionType>PARABOLIC_DISTRIBUTION</nearbySelectionDistributionType>&ndash;&gt;-->
-					<!--&lt;!&ndash;</nearbySelection>&ndash;&gt;-->
-				<!--&lt;!&ndash;</valueSelector>&ndash;&gt;-->
-			<!--&lt;!&ndash;</tailChainSwapMoveSelector>&ndash;&gt;-->
-		<!--</unionMoveSelector>-->
-		<!--<acceptor>-->
-			<!--<lateAcceptanceSize>400</lateAcceptanceSize>-->
-		<!--</acceptor>-->
-
-		<!--<forager>-->
-			<!--<acceptedCountLimit>1</acceptedCountLimit>-->
-		<!--</forager>-->
-	<!--</localSearch>-->
 </solver>

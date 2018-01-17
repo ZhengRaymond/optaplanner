@@ -6,23 +6,56 @@ import org.optaplanner.core.api.domain.variable.AnchorShadowVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariableGraphType;
 
-@PlanningEntity
-public class Customer extends Standstill {
+import com.homerlogistics.optaplanner.TSPDeliver.solver.CustomerDifficultyWeightFactory;
+
+@PlanningEntity(difficultyWeightFactoryClass = CustomerDifficultyWeightFactory.class)
+public class Customer implements Standstill {
+  protected Location location;
+  protected Standstill previousStandstill;
+  protected Customer nextCustomer;
+  protected Vehicle vehicle;
+  protected double weight;
+  protected int id;
+
   private Customer source;
   private Customer destination;
-  private Vehicle vehicle;
 
   public Customer() {
-//    System.out.println("Error: Default Customer constructor.");
-  }
-
-  public Customer(Location location) {
-    this.location = location;
     this.source = null;
     this.destination = null;
   }
 
-  @AnchorShadowVariable(sourceVariableName = "prev")
+  public Customer(Location location, int id) {
+    this.source = null;
+    this.destination = null;
+    this.location = location;
+    this.id = id;
+  }
+
+  @Override
+  @ProblemFactProperty
+  public Location getLocation() { return location; }
+
+  public void setLocation(Location location) { this.location = location; }
+
+  @PlanningVariable(valueRangeProviderRefs = {"vehicleRange", "customerRange"},
+          graphType = PlanningVariableGraphType.CHAINED)
+  public Standstill getPreviousStandstill() { return previousStandstill; }
+
+  public void setPreviousStandstill(Standstill previousStandstill) { this.previousStandstill = previousStandstill; }
+
+  @Override
+  public Customer getNextCustomer() {
+    return nextCustomer;
+  }
+
+  @Override
+  public void setNextCustomer(Customer nextCustomer) {
+    this.nextCustomer = nextCustomer;
+  }
+
+  @Override
+  @AnchorShadowVariable(sourceVariableName = "previousStandstill")
   public Vehicle getVehicle() {
     return vehicle;
   }
@@ -31,7 +64,26 @@ public class Customer extends Standstill {
     this.vehicle = vehicle;
   }
 
+
+  /* My getters and setters: */
   @ProblemFactProperty
+  public double getWeight() {
+    return weight;
+  }
+
+  public void setWeight(double weight) {
+    this.weight = weight;
+  }
+
+  @ProblemFactProperty
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
   public Customer getSource() {
     return source;
   }
@@ -40,7 +92,6 @@ public class Customer extends Standstill {
     this.source = source;
   }
 
-  @ProblemFactProperty
   public Customer getDestination() {
     return destination;
   }
@@ -49,30 +100,4 @@ public class Customer extends Standstill {
     this.destination = destination;
   }
 
-  @Override
-  public Standstill getNext() {
-    return next;
-  }
-
-  @Override
-  public void setNext(Standstill next) {
-    this.next = next;
-  }
-
-  @Override
-  @PlanningVariable(valueRangeProviderRefs = {"customerRange", "vehicleRange"},
-          graphType = PlanningVariableGraphType.CHAINED)
-  public Standstill getPrev() {
-    return prev;
-  }
-
-  @Override
-  public void setPrev(Standstill prev) {
-    this.prev = prev;
-  }
-
-  @Override
-  public Location getLocation() {
-    return location;
-  }
 }

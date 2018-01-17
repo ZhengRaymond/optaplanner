@@ -1,0 +1,14 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+import matplotlib.colors as col
+th = np.linspace(0, 2*np.pi, 128)
+
+def demo(sty):
+    fig, ax = plt.subplots(figsize=(3, 3))
+    ax.plot(th, np.cos(th), col.to_hex((0.2,0.2,0.9)), label='C1')
+    ax.plot(th, np.sin(th), col.to_hex((0.2,0.2,0.9)), label='C2')
+    ax.legend()
+
+demo('default')
+demo('seaborn')

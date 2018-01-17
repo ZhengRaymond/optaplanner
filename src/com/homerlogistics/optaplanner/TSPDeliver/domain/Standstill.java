@@ -6,29 +6,23 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariableGraphType;
 
 @PlanningEntity
-public abstract class Standstill {
-  protected Location location;
-  protected Standstill next;
-  protected Standstill prev;
+public interface Standstill {
 
-  @InverseRelationShadowVariable(sourceVariableName = "prev")
-  public abstract Standstill getNext();
-  public abstract void setNext(Standstill next);
+  /**
+   * @return never null
+   */
+  Location getLocation();
 
-  @PlanningVariable(valueRangeProviderRefs = {"customerRange", "vehicleRange"},
-          graphType = PlanningVariableGraphType.CHAINED)
-  public abstract Standstill getPrev();
-  public abstract void setPrev(Standstill prev);
+  /**
+   * @return sometimes null
+   */
+  Vehicle getVehicle();
 
-  public Location getLocation() {
-    return location;
-  }
+  /**
+   * @return sometimes null
+   */
+  @InverseRelationShadowVariable(sourceVariableName = "previousStandstill")
+  Customer getNextCustomer();
+  void setNextCustomer(Customer nextCustomer);
 
-  public void setLocation(Location location) {
-    this.location = location;
-  }
-
-  public double getDistance(Standstill other) {
-    return location.getDistance(other.location);
-  }
 }

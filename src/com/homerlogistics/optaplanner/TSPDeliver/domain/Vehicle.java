@@ -3,28 +3,21 @@ package com.homerlogistics.optaplanner.TSPDeliver.domain;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariableGraphType;
 
-public class Vehicle extends Standstill {
-  public Vehicle() {
-    this.location = new Location(0, 0);
-  }
+public class Vehicle implements Standstill {
+  protected Location location;
+  protected Customer nextCustomer;
+
+  public Location getLocation() { return location; }
+  public void setLocation(Location location) { this.location = location; }
 
   @Override
-  public Standstill getNext() {
-    return this.next;
-  }
+  public Customer getNextCustomer() { return nextCustomer; }
 
   @Override
-  public void setNext(Standstill next) {
-    this.next = next;
-  }
+  public void setNextCustomer(Customer nextCustomer) { this.nextCustomer = nextCustomer; }
 
   @Override
-  public Standstill getPrev() {
+  public Vehicle getVehicle() {
     return this;
-  }
-
-  @Override
-  public void setPrev(Standstill prev) {
-    System.out.println("Error: Attempting to setPrev of Vehicle");
   }
 }

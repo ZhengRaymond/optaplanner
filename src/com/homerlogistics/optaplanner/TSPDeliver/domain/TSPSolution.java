@@ -18,14 +18,29 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 @PlanningSolution
 public class TSPSolution {
 
-  private List<Customer> customerList; // the solution
+  protected List<Location> locationList;
+  protected List<Vehicle> vehicleList;
+  protected List<Customer> customerList;
 
-  private Vehicle vehicle;
   private HardSoftScore score;
 
-  public TSPSolution() {
-    this.vehicle = new Vehicle();
-    this.customerList = initialize(5);
+  @ProblemFactCollectionProperty
+  public List<Location> getLocationList() {
+    return locationList;
+  }
+
+  public void setLocationList(List<Location> locationList) {
+    this.locationList = locationList;
+  }
+
+  @PlanningEntityCollectionProperty
+  @ValueRangeProvider(id = "vehicleRange")
+  public List<Vehicle> getVehicleList() {
+    return vehicleList;
+  }
+
+  public void setVehicleList(List<Vehicle> vehicleList) {
+    this.vehicleList = vehicleList;
   }
 
   @PlanningEntityCollectionProperty
@@ -38,22 +53,6 @@ public class TSPSolution {
     this.customerList = customerList;
   }
 
-  @ValueRangeProvider(id = "vehicleRange")
-  public List<Vehicle> getVehicleRange() {
-    List<Vehicle> vehicleRange = new ArrayList<Vehicle>();
-    vehicleRange.add(this.vehicle);
-    return vehicleRange;
-  }
-
-  @ProblemFactProperty
-  public Vehicle getVehicle() {
-    return vehicle;
-  }
-
-  public void setVehicle(Vehicle vehicle) {
-    this.vehicle = vehicle;
-  }
-
   @PlanningScore
   public HardSoftScore getScore() {
     return score;
@@ -63,58 +62,39 @@ public class TSPSolution {
     this.score = score;
   }
 
+
+
+
   public String toString() {
-    String s = "plt.plot(";
-    String x = "[0";
-    String y = "[0";
-    String sx = "[0";
-    String sy = "[0";
-    for (Customer customer : customerList) {
-      Location loc = customer.getLocation();
-      x += "," + Math.round(loc.getX());
-      y += "," + Math.round(loc.getY());
-      if (customer.getDestination() != null) {
-        sx += "," + Math.round(loc.getX());
-        sy += "," + Math.round(loc.getY());
+    String sol = score.toString() + "\n";
+    for (Vehicle vehicle : vehicleList) {
+      String s = "";
+      String x = "" + (int) vehicle.getLocation().getX();
+      String y = "" + (int) vehicle.getLocation().getY();
+      String id = "-1";
+      String isSource = "2";
+      Location curr = vehicle.getLocation();
+      Customer next = vehicle.getNextCustomer();
+      int carrying = 0;
+      while (next != null) {
+        curr = next.getLocation();
+        x += "_" + Math.round(curr.getX());
+        y += "_" + Math.round(curr.getY());
+        if (next.getDestination() != null) {
+          isSource += "_1";
+          carrying += next.getWeight();
+        }
+        else {
+          isSource += "_0";
+          carrying -= next.getWeight();
+        }
+        id += "_" + next.getId();
+        next = next.getNextCustomer();
       }
+      s += x + "_" + y + "_" + id + "_" + isSource;
+      sol += s + "   ";
     }
-    x += "]";
-    y += "]";
-    sx += "]";
-    sy += "]";
-    s += x + "," + y + "," + "'-ro'" + "," + sx + "," + sy + "," + "'bo'" + "," +  "markersize=13" + ")";
-    s += "\nplt.gca().set_aspect('equal', adjustable='box')\nplt.show()";
-
-    return s;
-  }
-
-  private List<Customer> initialize(int size) {
-    List<Customer> customers = new ArrayList<Customer>();
-    Customer lastDest = null;
-    for (int i = 0; i < size; i++) {
-      Location location = new Location(Math.random() * 8000, Math.random() * 8000);
-      Location location2 = new Location(Math.random() * 8000, Math.random() * 8000);
-      Customer source = new Customer(location);
-      Customer destination = new Customer(location2);
-      source.setDestination(destination);
-      destination.setSource(source);
-
-      if (lastDest != null) {
-        lastDest.setNext(source);
-        source.setPrev(lastDest);
-      }
-      else {
-        source.setPrev(null);
-      }
-      source.setNext(destination);
-      destination.setPrev(source);
-      lastDest = destination;
-
-      customers.add(source);
-      customers.add(destination);
-    }
-    lastDest.setNext(null);
-    return customers;
+    return sol;
   }
 
 }
