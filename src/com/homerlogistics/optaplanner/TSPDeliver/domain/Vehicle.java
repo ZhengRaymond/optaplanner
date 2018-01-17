@@ -20,4 +20,14 @@ public class Vehicle implements Standstill {
   public Vehicle getVehicle() {
     return this;
   }
+
+  @Override
+  public Standstill getPreviousStandstill() {
+    return null;
+  }
+
+  @Override
+  public void setPreviousStandstill(Standstill previousStandstill) {
+    System.out.println("Error: setting previous of vehicle.");
+  }
 }

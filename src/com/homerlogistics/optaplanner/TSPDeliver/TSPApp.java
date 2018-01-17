@@ -28,7 +28,10 @@ public class TSPApp {
 //		int[] sizes = {25, 75};
 //		int[] numVeh = {2, 6};
 
-		int[] sizes = {25, 100};
+//		int[] sizes = {25, 100};
+//		int[] numVeh = {1};
+
+		int[] sizes = {3};
 		int[] numVeh = {1};
 
 		LocalDateTime currentTime = LocalDateTime.now();

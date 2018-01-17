@@ -25,4 +25,7 @@ public interface Standstill {
   Customer getNextCustomer();
   void setNextCustomer(Customer nextCustomer);
 
+  Standstill getPreviousStandstill();
+  void setPreviousStandstill(Standstill previousStandstill);
+
 }

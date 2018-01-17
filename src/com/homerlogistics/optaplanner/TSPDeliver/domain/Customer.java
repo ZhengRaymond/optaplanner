@@ -38,10 +38,12 @@ public class Customer implements Standstill {
 
   public void setLocation(Location location) { this.location = location; }
 
+  @Override
   @PlanningVariable(valueRangeProviderRefs = {"vehicleRange", "customerRange"},
           graphType = PlanningVariableGraphType.CHAINED)
   public Standstill getPreviousStandstill() { return previousStandstill; }
 
+  @Override
   public void setPreviousStandstill(Standstill previousStandstill) { this.previousStandstill = previousStandstill; }
 
   @Override

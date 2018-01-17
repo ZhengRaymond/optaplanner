@@ -14,10 +14,13 @@ public class PickupDeliveryChangeMoveFactory implements MoveListFactory<TSPSolut
     List<PickupDeliveryChangeMove> moveList = new ArrayList<>();
 
     List<Customer> customerList = solution.getCustomerList();
-    for (Customer customer : customerList) {
-      for (Customer target : customerList) {
-        if (customer != target) {
-          moveList.add(new PickupDeliveryChangeMove(customer, target));
+
+    for (int i = 3; i < customerList.size(); i++) {
+      Customer source = customerList.get(i);
+      for (int j = 3; j < customerList.size(); j++) {
+        Customer target = customerList.get(j);
+        if (i != j) {
+          moveList.add(new PickupDeliveryChangeMove(source, target));
         }
       }
     }
