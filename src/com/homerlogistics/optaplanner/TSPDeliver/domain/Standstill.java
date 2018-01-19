@@ -17,6 +17,7 @@ public interface Standstill {
    * @return sometimes null
    */
   Vehicle getVehicle();
+  void setVehicle(Vehicle vehicle);
 
   /**
    * @return sometimes null

@@ -21,6 +21,10 @@ public class Vehicle implements Standstill {
     return this;
   }
 
+  public void setVehicle(Vehicle vehicle) {
+    System.out.println("Error: setting vehicle of vehicle.");
+  }
+
   @Override
   public Standstill getPreviousStandstill() {
     return null;

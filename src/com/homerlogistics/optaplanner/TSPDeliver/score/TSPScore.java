@@ -8,22 +8,23 @@ import org.optaplanner.core.impl.score.director.easy.EasyScoreCalculator;
 import com.homerlogistics.optaplanner.TSPDeliver.domain.*;
 
 public class TSPScore implements EasyScoreCalculator<TSPSolution> {
-//  private static int count = 0;
 
   public HardSoftScore calculateScore(TSPSolution solution) {
     int hardScore = 0;
     int softScore = 0;
-    int capacity = 61;
+    int capacity = 16;
 
     List<Vehicle> vehicleList = solution.getVehicleList();
     int maxDistance = 0;
     for (Vehicle vehicle : vehicleList) {
+      int delivCount = 0;
       int distance = 0;
       Customer cust = vehicle.getNextCustomer();
-//      Location lastLoc = vehicle.getLocation();
-      Location lastLoc = null;
+      Location lastLoc = vehicle.getLocation();
+//      Location lastLoc = null;
       int carrying = 0;
       while (cust != null) {
+        delivCount+= 1;
         if (lastLoc != null) {
           distance += cust.getLocation().getDistance(lastLoc);
         }
@@ -39,8 +40,8 @@ public class TSPScore implements EasyScoreCalculator<TSPSolution> {
             current = current.getNextCustomer();
           }
           if (!found) hardScore -= 100;
-          // if (src.getVehicle() != src.getDestination().getVehicle()) {
-          //  hardScore -= 1;
+//           if (src.getVehicle() != src.getDestination().getVehicle()) {
+//            hardScore -= 1;
           // }
           carrying -= cust.getWeight();
         }
@@ -53,20 +54,17 @@ public class TSPScore implements EasyScoreCalculator<TSPSolution> {
         lastLoc = cust.getLocation();
         cust = cust.getNextCustomer();
       }
+      if (delivCount < 1) {
+        hardScore -= 10000;
+      }
       if (distance > maxDistance) {
         maxDistance = distance;
       }
+      softScore -= distance;
     }
-    softScore -= maxDistance;
+//    softScore -= maxDistance;
 
     HardSoftScore score = HardSoftScore.valueOf(hardScore, softScore);
-//    if (count % 1000000 == 0) {
-//      System.out.println("Intermediate step: ");
-//      System.out.println(score.toString());
-//      System.out.println(solution.toString());
-//      System.out.println("");
-//    }
-//    count++;
     return score;
   }
 }

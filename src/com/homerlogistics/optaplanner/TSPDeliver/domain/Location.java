@@ -33,7 +33,7 @@ public class Location {
 //
 //  public void setVehicle(Vehicle vehicle) {
 //    this.vehicle = vehicle;
-//  }
+//  }2200+5100
 
   public double getX() {
     return x;

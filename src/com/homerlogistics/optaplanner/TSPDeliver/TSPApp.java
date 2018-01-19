@@ -6,7 +6,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-
+import java.util.concurrent.TimeUnit;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
@@ -31,8 +31,21 @@ public class TSPApp {
 //		int[] sizes = {25, 100};
 //		int[] numVeh = {1};
 
-		int[] sizes = {3};
-		int[] numVeh = {1};
+		int[] sizes = {30};
+		int[] numVeh = {4};
+
+
+
+//		Location l1 = new Location(17, 22);
+//		Location l2 = new Location(3, 4);
+//		System.out.println(l1.getDistance(l2));
+//		try {
+//			TimeUnit.SECONDS.sleep(15);
+//		}
+//		catch(Exception e) {
+//
+//		}
+
 
 		LocalDateTime currentTime = LocalDateTime.now();
 		System.out.println("Current DateTime: " + currentTime);
@@ -84,7 +97,7 @@ public class TSPApp {
 		List<Vehicle> vehicles = new ArrayList<Vehicle>();
 		for (int i = 0; i < size; i++) {
 			Vehicle vehicle = new Vehicle();
-//			vehicle.setLocation(new Location(Math.random() * 2000, Math.random() * 3000));
+//			vehicle.setLocation(new Location(Math.random() * 50, Math.random() * 50));
 			vehicle.setLocation(new Location(1500, 5500));
 			vehicles.add(vehicle);
 		}
@@ -94,11 +107,14 @@ public class TSPApp {
 	private static List<Customer> initializeCustomers(int size) {
   	List<Customer> customerList = new ArrayList<Customer>();
   	for (int i = 0; i < size; i++) {
-			double x = ((int) (Math.random() * 30)) * 100 + Math.random();
-			double y = ((int) (Math.random() * 110)) * 100 + Math.random();
-			Customer source = new Customer(new Location(x, y), i);
+//			double x = ((int) (Math.random() * 30)) * 100 + Math.random();
+//			double y = ((int) (Math.random() * 110)) * 100 + Math.random();
+//			Customer source = new Customer(new Location(x, y), i);
+//			Customer source = new Customer(new Location(Math.floor(Math.random() * 50), Math.floor(Math.random() * 50)), i);
+			Customer source = new Customer(new Location(Math.round(Math.random()) * 2000 + 2000 + Math.random() * 300, Math.round(Math.random()) * 2000 + 2000 + Math.random() * 300), i);
 //			Customer source = new Customer(new Location(Math.random() * 3000, Math.random() * 11000), i);
-			Customer destination = new Customer(new Location(Math.random() * 3000, Math.random() * 11000), i);//12874
+			Customer destination = new Customer(new Location(Math.random() * 6000, Math.random() * 11000), i); //12874
+//			Customer destination = new Customer(new Location(Math.floor(Math.random() * 50), Math.floor(Math.random() * 50)), i);//12874
 			source.setDestination(destination);
 //			source.setWeight(Math.random() * 5 + 5);
 			source.setWeight(5);
