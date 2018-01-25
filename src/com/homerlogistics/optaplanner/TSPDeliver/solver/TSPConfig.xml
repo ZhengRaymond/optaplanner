@@ -1,56 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <solver>
-	<!-- Define the model -->
 	<solutionClass>com.homerlogistics.optaplanner.TSPDeliver.domain.TSPSolution</solutionClass>
 	<entityClass>com.homerlogistics.optaplanner.TSPDeliver.domain.Standstill</entityClass>
 	<entityClass>com.homerlogistics.optaplanner.TSPDeliver.domain.Customer</entityClass>
-
-	<!-- Define the score function -->
 	<scoreDirectorFactory>
 		<easyScoreCalculatorClass>com.homerlogistics.optaplanner.TSPDeliver.score.TSPScore</easyScoreCalculatorClass>
 		<initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
 	</scoreDirectorFactory>
-
-	<!-- Configure the optimization algorithms (optional) -->
-  	<termination>
-	 	 <secondsSpentLimit>15</secondsSpentLimit>
-  	</termination>
-
+	<termination>
+		<secondsSpentLimit>600</secondsSpentLimit>
+	</termination>
 	<constructionHeuristic>
 		<constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
 	</constructionHeuristic>
-
 	<localSearch>
 		<unionMoveSelector>
 			<moveListFactory>
 				<moveListFactoryClass>com.homerlogistics.optaplanner.TSPDeliver.solver.PickupDeliveryChangeMoveFactory</moveListFactoryClass>
 			</moveListFactory>
-			<changeMoveSelector/>
-			<swapMoveSelector/>
-			<subChainChangeMoveSelector>
-				<selectReversingMoveToo>true</selectReversingMoveToo>
-			</subChainChangeMoveSelector>
-			<subChainSwapMoveSelector>
-				<selectReversingMoveToo>true</selectReversingMoveToo>
-			</subChainSwapMoveSelector>
-			<tailChainSwapMoveSelector>
+			<changeMoveSelector>
 				<entitySelector id="entitySelector">
 					<entityClass>com.homerlogistics.optaplanner.TSPDeliver.domain.Customer</entityClass>
 				</entitySelector>
 				<valueSelector>
 					<nearbySelection>
 						<originEntitySelector mimicSelectorRef="entitySelector"/>
-						<nearbyDistanceMeterClass>com.homerlogistics.optaplanner.TSPDeliver.solver.distanceMeter</nearbyDistanceMeterClass>
+						<nearbyDistanceMeterClass>com.homerlogistics.optaplanner.TSPDeliver.solver.nearbyDistanceMeterChange</nearbyDistanceMeterClass>
 						<nearbySelectionDistributionType>PARABOLIC_DISTRIBUTION</nearbySelectionDistributionType>
 					</nearbySelection>
 				</valueSelector>
-			</tailChainSwapMoveSelector>
+			</changeMoveSelector>
+			<subChainChangeMoveSelector>
+				<selectReversingMoveToo>true</selectReversingMoveToo>
+			</subChainChangeMoveSelector>
+			<tailChainSwapMoveSelector/>
 		</unionMoveSelector>
 		<acceptor>
-			<lateAcceptanceSize>200</lateAcceptanceSize>
+			<entityTabuSize>9</entityTabuSize>
 		</acceptor>
 		<forager>
-			<acceptedCountLimit>1</acceptedCountLimit>
+			<acceptedCountLimit>2000</acceptedCountLimit>
 		</forager>
 	</localSearch>
 </solver>

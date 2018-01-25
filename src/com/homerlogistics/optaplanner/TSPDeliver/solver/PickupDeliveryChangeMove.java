@@ -42,24 +42,14 @@ public class PickupDeliveryChangeMove extends AbstractMove<TSPSolution> {
 
   @Override
   protected void doMoveOnGenuineVariables(ScoreDirector<TSPSolution> scoreDirector) {
-//    System.out.println("Genuine move on...(" + customer.getLocation() + ") to (" + target.getLocation() + ").");
-
-    validate(customer, "Pre");
-
     // remove customer
     delete(customer, scoreDirector);
-
-    validate(customer, "A");
 
     // add customer
     insert(customer, target, scoreDirector);
 
-    validate(customer, "B");
-
     // remove customer correspondent
     delete(destination, scoreDirector);
-
-    validate(customer, "C");
 
     // add customer correspondent
     Customer curr = customer;
@@ -81,8 +71,6 @@ public class PickupDeliveryChangeMove extends AbstractMove<TSPSolution> {
       this.best = newBest;
     }
     insert(destination, this.best, scoreDirector);
-
-    validate(customer, "D");
   }
 
   public void validate(Customer customer, String id) {
@@ -104,7 +92,7 @@ public class PickupDeliveryChangeMove extends AbstractMove<TSPSolution> {
   public boolean isMoveDoable(ScoreDirector<TSPSolution> scoreDirector) {
     return (customer != null && target != null &&
             customer.getPreviousStandstill() != target &&
-            destination != null);
+            destination != null &&  customer.getPreviousStandstill() != null && target.getPreviousStandstill() != null);
   }
 
   @Override
@@ -123,44 +111,65 @@ public class PickupDeliveryChangeMove extends AbstractMove<TSPSolution> {
   private void insert(Customer source, Standstill target, ScoreDirector scoreDirector) {
     Customer next = target.getNextCustomer();
     if (next != null) {
-//      scoreDirector.beforeVariableChanged(source, "nextCustomer");
-//      scoreDirector.beforeVariableChanged(next, "previousStandstill");
+      scoreDirector.beforeVariableChanged(next, "previousStandstill");
+      scoreDirector.beforeVariableChanged(target, "nextCustomer");
+      next.setPreviousStandstill(null);
+      target.setNextCustomer(null);
+      scoreDirector.afterVariableChanged(next, "previousStandstill");
+      scoreDirector.afterVariableChanged(target, "nextCustomer");
+
+      scoreDirector.beforeVariableChanged(next, "previousStandstill");
+      scoreDirector.beforeVariableChanged(source, "nextCustomer");
       next.setPreviousStandstill(source);
       source.setNextCustomer(next);
+      scoreDirector.afterVariableChanged(next, "previousStandstill");
+      scoreDirector.afterVariableChanged(source, "nextCustomer");
+
+      scoreDirector.beforeVariableChanged(source, "previousStandstill");
+      scoreDirector.beforeVariableChanged(target, "nextCustomer");
+      source.setPreviousStandstill(target);
+      target.setNextCustomer(source);
+      scoreDirector.afterVariableChanged(source, "previousStandstill");
+      scoreDirector.afterVariableChanged(target, "nextCustomer");
+
 //      changedEntities.add(next);
 //      changedEntities.add(source);
 //      changedValues.add(source);
 //      changedValues.add(next);
-//      scoreDirector.afterVariableChanged(next, "previousStandstill");
-//      scoreDirector.afterVariableChanged(source, "nextCustomer");
+    }
+    else {
+      scoreDirector.beforeVariableChanged(source, "previousStandstill");
+      scoreDirector.beforeVariableChanged(target, "nextCustomer");
+      source.setPreviousStandstill(target);
+      target.setNextCustomer(source);
+      scoreDirector.afterVariableChanged(source, "previousStandstill");
+      scoreDirector.afterVariableChanged(target, "nextCustomer");
     }
 
-//    scoreDirector.beforeVariableChanged(target, "nextCustomer");
-//    scoreDirector.beforeVariableChanged(source, "previousStandstill");
-    source.setPreviousStandstill(target);
-    target.setNextCustomer(source);
-    source.setVehicle(target.getVehicle());
 //    changedEntities.add(source);
 //    changedEntities.add(target);
 //    changedValues.add(target);
 //    changedValues.add(source);
-//    scoreDirector.afterVariableChanged(source, "previousStandstill");
-//    scoreDirector.afterVariableChanged(target, "nextCustomer");
   }
 
   private void delete(Standstill source, ScoreDirector scoreDirector) {
     Customer next = source.getNextCustomer();
     Standstill previous = source.getPreviousStandstill();
     if (previous != null && next != null) {
-//      scoreDirector.beforeVariableChanged(source, "nextCustomer");
-//      scoreDirector.beforeVariableChanged(source, "previousStandstill");
-//      scoreDirector.beforeVariableChanged(previous, "nextCustomer");
-//      scoreDirector.beforeVariableChanged(next, "previousStandstill");
+      scoreDirector.beforeVariableChanged(source, "previousStandstill");
+      scoreDirector.beforeVariableChanged(previous, "nextCustomer");
+      source.setPreviousStandstill(null);
+      previous.setNextCustomer(null);
+      scoreDirector.afterVariableChanged(source, "previousStandstill");
+      scoreDirector.afterVariableChanged(previous, "nextCustomer");
 
+      scoreDirector.beforeVariableChanged(next, "previousStandstill");
+      scoreDirector.beforeVariableChanged(previous, "nextCustomer");
       next.setPreviousStandstill(previous);
       previous.setNextCustomer(next);
-      source.setPreviousStandstill(null);
-      source.setNextCustomer(null);
+      scoreDirector.afterVariableChanged(next, "previousStandstill");
+      scoreDirector.afterVariableChanged(previous, "nextCustomer");
+
 //      changedEntities.add(next);
 //      changedEntities.add(previous);
 //      changedEntities.add(source);
@@ -169,29 +178,24 @@ public class PickupDeliveryChangeMove extends AbstractMove<TSPSolution> {
 //      changedValues.add(next);
 //      changedValues.add(null);
 //      changedValues.add(null);
-
-//      scoreDirector.afterVariableChanged(next, "previousStandstill");
-//      scoreDirector.afterVariableChanged(previous, "nextCustomer");
-//      scoreDirector.afterVariableChanged(source, "previousStandstill");
-//      scoreDirector.afterVariableChanged(source, "nextCustomer");
     }
     else if (next != null) {
-      scoreDirector.beforeVariableChanged(source, "nextCustomer");
       scoreDirector.beforeVariableChanged(next, "previousStandstill");
-
+      scoreDirector.beforeVariableChanged(source, "nextCustomer");
       source.setNextCustomer(null);
       next.setPreviousStandstill(null);
+      scoreDirector.afterVariableChanged(source, "nextCustomer");
+      scoreDirector.afterVariableChanged(next, "previousStandstill");
+
 //      changedEntities.add(source);
 //      changedEntities.add(next);
 //      changedValues.add(null);
 //      changedValues.add(null);
 
-      scoreDirector.afterVariableChanged(next, "previousStandstill");
-      scoreDirector.afterVariableChanged(source, "nextCustomer");
     }
     else if (previous != null) {
-//      scoreDirector.beforeVariableChanged(source, "previousStandstill");
-//      scoreDirector.beforeVariableChanged(previous, "nextCustomer");
+      scoreDirector.beforeVariableChanged(source, "previousStandstill");
+      scoreDirector.beforeVariableChanged(previous, "nextCustomer");
 
       previous.setNextCustomer(null);
       source.setPreviousStandstill(null);
@@ -200,8 +204,8 @@ public class PickupDeliveryChangeMove extends AbstractMove<TSPSolution> {
 //      changedValues.add(null);
 //      changedValues.add(null);
 
-//      scoreDirector.afterVariableChanged(previous, "nextCustomer");
-//      scoreDirector.afterVariableChanged(source, "previousStandstill");
+      scoreDirector.afterVariableChanged(previous, "nextCustomer");
+      scoreDirector.afterVariableChanged(source, "previousStandstill");
     }
   }
 }

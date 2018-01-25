@@ -12,10 +12,13 @@ public class TSPScore implements EasyScoreCalculator<TSPSolution> {
   public HardSoftScore calculateScore(TSPSolution solution) {
     int hardScore = 0;
     int softScore = 0;
-    int capacity = 16;
+    int capacity = 251;
+    int maxDistance = 80000;
+//    int minDistance = 30000;
+    int minDistance = 0;
 
     List<Vehicle> vehicleList = solution.getVehicleList();
-    int maxDistance = 0;
+
     for (Vehicle vehicle : vehicleList) {
       int delivCount = 0;
       int distance = 0;
@@ -54,11 +57,14 @@ public class TSPScore implements EasyScoreCalculator<TSPSolution> {
         lastLoc = cust.getLocation();
         cust = cust.getNextCustomer();
       }
-      if (delivCount < 1) {
-        hardScore -= 10000;
-      }
+//      if (delivCount < 6) {
+//        hardScore -= 500;
+//      }
       if (distance > maxDistance) {
-        maxDistance = distance;
+        hardScore -= (distance - maxDistance);
+      }
+      if (distance < minDistance) {
+        hardScore -= (minDistance - distance);
       }
       softScore -= distance;
     }

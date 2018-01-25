@@ -5,17 +5,24 @@ import random
 import math
 
 fig, ax = plt.subplots(figsize=(20, 10))
+txtAxe = plt.axes([0.1, 0.2, 0.3, 0.5])
 colors = [
     ['#ff19c1', '#ff19c1', 'black'],
     ['#18ff4a', '#18ff4a', 'black'],
     ['#0c75ff', '#0c75ff', 'black'],
     ['#ffaf47', '#ffaf47', 'black'],
-    ['k', 'k', 'black'],
-    ['b', 'b', 'black'],
-    ['w', 'w', 'black'],
+    ['#ff19c1', '#ff19c1', 'black'],
+    ['#18ff4a', '#18ff4a', 'black'],
+    ['#0c75ff', '#0c75ff', 'black'],
+    ['#ffaf47', '#ffaf47', 'black'],
+    ['#ff19c1', '#ff19c1', 'black'],
+    ['#18ff4a', '#18ff4a', 'black'],
+    ['#0c75ff', '#0c75ff', 'black'],
+    ['#ffaf47', '#ffaf47', 'black'],
+
 ]
 
-msize = 16
+msize = 3
 
 vx = []
 vy = []
@@ -46,15 +53,18 @@ for vehicle in vehicleData:
     vtype.append([int(i) for i in arr[3*n:4*n]])
 
 def redraw(event, index):
+    # txtAxe.clear()
     ax.clear()
-    for i in range(numVeh):
+    indices = [i for i in range(numVeh) if i != index]
+    indices.append(index)
+    for i in indices:
         x = vx[i]
         y = vy[i]
         ID = vID[i]
         t = vtype[i]
-        opacity = int(i == index) * 0.8 + 0.2
+        opacity = int(i == index) * 0.9 + 0.1
 
-        ax.plot(x, y, '-', color=colors[i][1], markersize=msize, linewidth=3.0, alpha=opacity)
+        ax.plot(x, y, '-', color=colors[i][1], markersize=msize, linewidth=1.0, alpha=opacity)
         for j in range(len(x)):
             cx = x[j]
             cy = y[j]
@@ -68,14 +78,16 @@ def redraw(event, index):
             else:
                 ax.plot(cx, cy, 'go', markersize=msize, alpha=opacity)
 
-            ax.text(cx-0.15, cy-0.15, cID, color=colors[i][2], alpha=opacity)
-        if i == index:
+            #ax.text(cx-0.15, cy-0.15, cID, color=colors[i][2], alpha=opacity)
+        if i == index and len(x) >= 2:
             distance = getDistance(x, y)
-            numPackages = len(x)
-            DPH = numPackages / ((distance / 10800) + (numPackages * 10)/60)
-            ax.text(-800, -200, 'Distance (meters) = %.2f' % distance, fontsize=12)
-            ax.text(-800, -675, "Packages Delivered = %d" % numPackages, fontsize=12)
-            ax.text(-800, -1500, "DPH = %.3f" % DPH, fontsize=24)
+            numPackages = (len(x) - 1) / 2
+            DPH = numPackages / (distance / 10800 + numPackages * 10 / 60)
+            txtAxe.clear()
+            txtAxe.tick_params( axis='both', which='both', top='off', right='off', bottom='off', left='off', labelbottom='off')
+            txtAxe.text(0.1, 0.9, 'Distance (meters) = %.2f' % distance, fontsize=12)
+            txtAxe.text(0.1, 0.8, "Packages Delivered = %d" % numPackages, fontsize=12)
+            txtAxe.text(0.1, 0.7, "DPH = %.3f" % DPH, fontsize=24)
         ax.margins(0.2, 0.2)
     plt.show()
 
@@ -85,22 +97,9 @@ def redrawGenerator(index):
 axes = []
 buttons = []
 for i in range(numVeh):
-    axes.append(plt.axes([0.15+0.1*i, 0.05, 0.06, 0.05]))
+    axes.append(plt.axes([0.15+0.1*i, 0.01, 0.06, 0.05]))
     buttons.append(Button(axes[i], "Vehicle " + str(i+1)))
     buttons[i].on_clicked(redrawGenerator(i))
-#
-# axes.append(plt.axes([0.05+0.15*0, 0.05, 0.1, 0.05]))
-# axes.append(plt.axes([0.05+0.15*1, 0.05, 0.1, 0.05]))
-# axes.append(plt.axes([0.05+0.15*2, 0.05, 0.1, 0.05]))
-# axes.append(plt.axes([0.05+0.15*3, 0.05, 0.1, 0.05]))
-# btn1 = Button(axes[0], "Vehicle " + str(1))
-# btn2 = Button(axes[1], "Vehicle " + str(2))
-# btn3 = Button(axes[2], "Vehicle " + str(3))
-# btn4 = Button(axes[3], "Vehicle " + str(4))
-# btn1.on_clicked(redraw)
-# btn2.on_clicked(redraw)
-# btn3.on_clicked(redraw)
-# btn4.on_clicked(redraw)
 
-#plt.gca().set_aspect('equal')
+ax.set_aspect('equal')
 plt.show()

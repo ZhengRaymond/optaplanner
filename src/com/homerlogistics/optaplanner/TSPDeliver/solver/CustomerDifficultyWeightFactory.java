@@ -20,9 +20,19 @@ public class CustomerDifficultyWeightFactory implements SelectionSorterWeightFac
 
     public CustomerDifficultyWeight(Customer customer) {
       this.customer = customer;
-      this.depot = new Location(0, 0);
       this.depotAngle = Math.atan2(customer.getLocation().getX(), customer.getLocation().getY());
-      this.depotRoundTripDistance = customer.getLocation().getDistance(depot);
+      this.depot = new Location(0, 0);
+      Customer dest = customer.getDestination();
+      if (dest != null) {
+        Location c = customer.getLocation();
+        Location d = dest.getLocation();
+        this.depotRoundTripDistance = this.depot.getDistance(c) + c.getDistance(d) + d.getDistance(this.depot);
+      }
+      else {
+        Location s = customer.getSource().getLocation();
+        Location c = customer.getLocation();
+        this.depotRoundTripDistance = this.depot.getDistance(s) + s.getDistance(c) + c.getDistance(this.depot);
+      }
     }
 
     @Override
